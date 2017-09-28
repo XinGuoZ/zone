@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <!-- 开发者模式 -->
+    <constant name="struts.devMode" value="true" />
+    
+  
+    
+    <package name="zone" extends="struts-default" namespace="/">
+       <!-- 自定义拦截器 -->
+	 	<interceptors>
+	       <interceptor name="PrivilegeInterceptor" 
+	           class="com.zone.interceptor.PrivilegeInterceptor">
+	           
+	       </interceptor>
+	   	</interceptors>  
+	   	<!-- 全局 -->
+	   	<global-results>
+			<result name="msg">/WEB-INF/jsp/msg.jsp</result>
+			<result name="login">/Login.jsp</result>
+		</global-results>
+		        
+        <!-- 首页action -->
+        <action name="index_*" class="index" method="{1}">
+            <result name="index" >/WEB-INF/jsp/index.jsp</result>
+            <result name="myessay">/WEB-INF/jsp/myessay.jsp</result>
+        </action>
+        <!-- user -->
+        <action name="user_*" class="useraction" method="{1}">
+            <result name="registPage">/WEB-INF/jsp/signup.jsp</result>
+            <result name="checkcodeFail">/WEB-INF/jsp/regist.jsp</result>
+            <result name="signInPage">/WEB-INF/jsp/signIn.jsp</result>
+            <result name="loginSucess" type="redirectAction">index</result>
+            <result name="input">/WEB-INF/jsp/regist.jsp</result>
+            <result name="user_info">/WEB-INF/jsp/my_info.jsp</result>
+            <result name="login" type="redirectAction">user_signInPage</result>
+            <result name="update" type="redirectAction">user_info</result>
+        </action>
+        
+        <!-- 验证码Action -->
+		<action name="CheckImg" class="CheckImgAction"></action>
+		
+		<!-- essay -->
+		<action name="essay_*" class="essayaction" method="{1}">
+		    <result name="index" type="redirectAction">index</result>
+		    <result name ="publish">/WEB-INF/jsp/publish.jsp</result>
+		    
+		</action>
+		
+		<!-- comment -->
+		<action name="comment_*" class="commentaction" method="{1}">
+		    <result name="index" type="redirectAction">index</result>
+		</action>
+		<!-- 后台管理员 -->
+		<action name="admin_*" class="adminaction" method="{1}">
+		    <result name="loginFail">/Login.jsp</result>
+		    <result name="loginscu">/manager/index.jsp</result>
+		    <result name="exit">/Login.jsp</result>
+			   <interceptor-ref name="PrivilegeInterceptor">
+					<param name="excludeMethods">login</param>
+				</interceptor-ref>
+				<interceptor-ref name="defaultStack"/>
+		</action>
+		<!-- 后台用户管理 -->
+		<action name="manageruser_*" class="manageraction" method="{1}">
+		    <result name="findalluser">/manager/manager_findall.jsp</result>
+		    <result name="delsuc" type="redirectAction">manageruser_findalluser</result>
+		    <result name="findbyuid_suc">/manager/edit_user.jsp</result>
+		     <interceptor-ref name="PrivilegeInterceptor"/>
+		     <interceptor-ref name="defaultStack"/>
+		</action>
+    </package>
+</struts>	

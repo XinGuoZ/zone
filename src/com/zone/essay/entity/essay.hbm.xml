@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.zone.essay.entity.Essay" table="essay">
+	    <id name="esid" column="esid">
+	       <generator class="native"></generator>
+	    </id>
+	  <property name="essay" column="essay" length="3000" not-null="true"/>
+	  <property name="date" column="date" length="20" not-null="true"></property>
+	  <property name="click" column="click"/>
+	  <property name="laud" column="laud"/>
+	  <property name="estate" column="estate" length="2" not-null="true"/>
+	  
+	  <many-to-one name="user" class="com.zone.user.entity.User" column="userid"/>
+	  <set name="comment" table="comment">
+	      <key column="esid"/>
+	      <one-to-many class="com.zone.comment.entity.Comment"/>
+	  </set>
+	</class>
+</hibernate-mapping>	

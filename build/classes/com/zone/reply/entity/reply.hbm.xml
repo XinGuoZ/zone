@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.zone.reply.entity.Reply" table="reply">
+        <id name="reid" column="reid">
+			<generator class="native"></generator>     
+        </id>
+        <property name="reply" column="reply" length="500" not-null="true"/>
+        <property name="restate" column="restate" length="2" not-null="true"/>
+        <many-to-one name="comment" class="com.zone.comment.entity.Comment" column="comid"/>
+        <many-to-one name="user" class="com.zone.user.entity.User" column="userid"/>
+    </class>
+</hibernate-mapping>	

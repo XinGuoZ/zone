@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.zone.user.entity.User" table="user">
+        <id name="userid" column="userid">
+            <generator class="native"></generator>
+            
+        </id>
+        <property name="username" column="username" length="50" not-null="true"/>
+        <property name="userpass" column="userpass" length="50" not-null="true"/>
+        <property name="userboth" column="userboth" length="20" not-null="true"/>
+        <property name="code" column="code"/>
+        <property name="imgpath" column="imgpath"/>
+        <property name="email" column="email" length="50" not-null="true"/>
+        <property name="joinin" column="joinin" length="20" not-null="true"/>
+        <property name="ustate" column="ustate"></property>
+       <!-- 与分组表形成一对多 -->
+       <set name="essay" lazy="false" cascade="delete">
+           <key column="userid"/>
+           <one-to-many class="com.zone.essay.entity.Essay"/>
+       </set>
+       <set name="reply" lazy="false" cascade="delete">
+           <key column="userid"/>
+           <one-to-many class="com.zone.reply.entity.Reply"/>
+       </set>
+       <set name="comment" lazy="false" cascade="delete">
+           <key column="usid"/>
+           <one-to-many class="com.zone.comment.entity.Comment"/>
+       </set>
+    </class>
+</hibernate-mapping>

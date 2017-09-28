@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.zone.comment.entity.Comment" table="comment">
+        <id name="comid" column="comid">
+           <generator class="native"></generator>
+        </id>
+        <property name="comment" column="comment" length="500" not-null="true"/>
+        <many-to-one name="essay" class="com.zone.essay.entity.Essay" column="esid"/>
+        
+        <set name="reply" table="reply">
+            <key column="comid"/>
+            <one-to-many class="com.zone.reply.entity.Reply"/>
+        </set>
+       <many-to-one name="user" class="com.zone.user.entity.User" column="usid"/>
+    </class>
+</hibernate-mapping>	

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd">
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+    
+    <!-- c3p0连接池 -->
+  	  <bean id="dataSource" class=" com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driver}"></property>
+        <property name="jdbcUrl" value="${jdbc.url}?useUnicode=true&amp;characterEncoding=UTF8&amp;autoReconnect=true"></property>
+        <property name="user" value="${jdbc.user}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+    </bean>
+    
+     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+       <property name="dataSource" ref="dataSource"></property>
+        
+        <!-- 配置Hibernate的其它的属性 -->
+        <property name="hibernateProperties">
+            <props>
+	            <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+	            <prop key="hibernate.show_sql">true</prop>
+	            <prop key="hibernate.connection.autocommit">false</prop>
+	            <prop key="hibernate.hbm2ddl.auto">update</prop>
+           </props> 
+        </property>
+        
+        
+       <!-- 配置hibernate映射文件 -->
+        <property name="mappingResources">
+            <list>
+                <value>com/zone/user/entity/user.hbm.xml</value>
+                <value>com/zone/essay/entity/essay.hbm.xml</value>
+             	<value>com/zone/comment/entity/comment.hbm.xml</value>
+                <value>com/zone/reply/entity/reply.hbm.xml</value>
+                <value>com/zone/group/entity/group.hbm.xml</value>
+                <value>com/zone/friends/entity/friends.hbm.xml</value>
+                <value>com/zone/user/entity/admin.hbm.xml</value>
+            </list>
+        </property>
+    </bean>
+    <!-- 开启事物管理 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+    
+    <!-- 开启事物管理 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    
+    <!--验证码 -->
+    <bean id="CheckImgAction" class="com.zone.user.action.CheckImgAction"></bean>
+    <!-- 前台模块 -->
+    <bean id="index" class="com.zone.index.action.IndexAction">
+        <property name="essayService" ref="essayService"></property>
+        <property name="commentService" ref="commentService"></property>
+        <property name="userService" ref="userService"></property>
+        <property name="replyService" ref="replyService"></property>
+    </bean>
+    
+     <!-- 用户模块 -->
+    <bean id="useraction" class="com.zone.user.action.UserAction" scope="prototype">
+        <property name="userService" ref="userService"></property>
+    </bean>
+    
+    <bean id="manageraction" class="com.zone.user.action.ManagerUser" scope="prototype">
+        <property name="userService" ref="userService"></property>
+    </bean>
+    
+    <bean id="userService" class="com.zone.user.service.userService" >
+        <property name="userDAO" ref="userDAO"></property>
+    </bean>
+    <bean id="userDAO" class="com.zone.user.DAO.userDAO">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+    
+    <!-- essay模块 -->
+    <bean id="essayaction" class="com.zone.essay.action.EssayAction" scope="prototype">
+        <property name="essayService" ref="essayService"></property>
+    </bean>
+    <bean id="essayService" class="com.zone.essay.service.EssayService">
+        <property name="essayDAO" ref="essayDAO"/>
+    </bean>
+    <bean id="essayDAO" class="com.zone.essay.DAO.EssayDAO">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+    
+    <!-- commment模块 -->
+    <bean id="commentaction" class="com.zone.comment.action.ConmentAction" scope="prototype">
+        <property name="commentService" ref="commentService"></property>
+    </bean>
+    <bean id="commentService" class="com.zone.comment.service.CommentService">
+        <property name="commentDAO" ref="commentDAO"></property>
+    </bean>
+    <bean id="commentDAO" class="com.zone.comment.DAO.CommentDAO">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+    
+    <!-- reply模块 -->
+    <bean id="replyaction" class="com.zone.reply.action.ReplyAction" scope="prototype">
+        <property name="replyService" ref="replyService"></property>
+    </bean>
+    <bean id="replyService" class="com.zone.reply.service.ReplyService">
+        <property name="replyDAO" ref="replyDAO"></property>
+    </bean>
+    <bean id="replyDAO" class="com.zone.reply.DAO.ReplyDAO">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+    
+    <!-- 后台管理 -->
+    <bean id="adminaction" class="com.zone.user.action.AdminAction" scope="prototype">
+        <property name="adminService" ref="adminService"></property>
+    </bean>
+    <bean id="adminService" class="com.zone.user.service.AdminService">
+        <property name="adminDAO" ref="adminDAO"></property>
+    </bean>
+    <bean id="adminDAO" class="com.zone.user.DAO.AdminDAO">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+</beans>
