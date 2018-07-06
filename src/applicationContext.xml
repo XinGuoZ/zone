@@ -15,9 +15,9 @@
 	<context:property-placeholder location="classpath:jdbc.properties"/>
     
     <!-- c3p0连接池 -->
-  	  <bean id="dataSource" class=" com.mchange.v2.c3p0.ComboPooledDataSource">
+  	  <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <property name="driverClass" value="${jdbc.driver}"></property>
-        <property name="jdbcUrl" value="${jdbc.url}?useUnicode=true&amp;characterEncoding=UTF8&amp;autoReconnect=true"></property>
+        <property name="jdbcUrl" value="${jdbc.url}"></property>
         <property name="user" value="${jdbc.user}"></property>
         <property name="password" value="${jdbc.password}"></property>
     </bean>
@@ -28,10 +28,12 @@
         <!-- 配置Hibernate的其它的属性 -->
         <property name="hibernateProperties">
             <props>
-	            <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+	            <prop key="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</prop>
 	            <prop key="hibernate.show_sql">true</prop>
 	            <prop key="hibernate.connection.autocommit">false</prop>
 	            <prop key="hibernate.hbm2ddl.auto">update</prop>
+	            <prop key="format_sql">true</prop>
+	            <!-- <prop key="hibernate.connection.provider_class">com.mchange.v2.c3p0.ComboPooledDataSource</prop> -->
            </props> 
         </property>
         
